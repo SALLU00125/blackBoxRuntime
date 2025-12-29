@@ -1,3 +1,4 @@
+// vite.lock.config.ts
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import dts from 'vite-plugin-dts';
@@ -8,17 +9,9 @@ const srcRoot = path.resolve(projectRoot, 'src');
 const componentsRoot = path.resolve(srcRoot, 'Components');
 const entryFile = path.resolve(srcRoot, 'BarrelFile/ComponentsToBeLocked.tsx');
 
-console.log(
-`projectRoot   : ${projectRoot}
-srcRoot       : ${srcRoot}
-componentsRoot: ${componentsRoot}
-entryFile     : ${entryFile}`
-);
-//Outputs Vars
 const LK_Comp = 'Core';
 const LK_CompFileName = 'core-ui-runtime';
 
-// Improved Normalization
 const normalize = (p: string) => path.normalize(p).split(path.sep).join('/');
 
 export default defineConfig({
@@ -29,12 +22,42 @@ export default defineConfig({
     },
     plugins: [
         react(),
-        // dts({
-        //     insertTypesEntry: true,
-        //     rollupTypes: true,
-        //     outDir: `src/${LK_Comp}`,
-        //
-        // }),
+        dts({
+            insertTypesEntry: true,
+            rollupTypes: true,
+            outDir: `src/${LK_Comp}`,
+
+            // Critical fixes for the absolute path error
+            tsconfigPath: path.resolve(projectRoot, 'tsconfig.app.json'),
+            entryRoot: srcRoot,
+
+            // Exclude config files that cause issues
+            exclude: [
+                'vite.config.ts',
+                'vite.lock.config.ts',
+                '**/*.test.tsx',
+                '**/*.spec.tsx',
+                'node_modules/**'
+            ],
+
+            // Only include necessary paths
+            include: [
+                'src/Components/**/*',
+                'src/BarrelFile/**/*',
+                'src/LICENSE_O_S/**/*'
+            ],
+
+            // Additional compiler options
+            compilerOptions: {
+                declarationMap: false,
+                composite: false,
+            },
+
+            // This prevents the "not an absolute path" error
+            staticImport: true,
+            skipDiagnostics: false,
+            logDiagnostics: true,
+        }),
     ],
     build: {
         minify: false,
@@ -49,18 +72,13 @@ export default defineConfig({
 
         rollupOptions: {
             external: (source, importer, isEntry) => {
-                // FIX 1: Explicitly allow the entry point
                 if (isEntry) return false;
-
-                // FIX 2: If the source matches the entry file path exactly
                 if (path.resolve(source) === path.resolve(entryFile)) return false;
 
-                // Standard Node Modules
                 if (!source.startsWith('.') && !source.startsWith('/') && !source.startsWith('@')) {
                     return true;
                 }
 
-                // Resolve the actual path of the import
                 let absolutePath = source;
                 if (importer && source.startsWith('.')) {
                     absolutePath = path.resolve(path.dirname(importer), source);
@@ -71,7 +89,6 @@ export default defineConfig({
                 const cleanPath = normalize(absolutePath);
                 const cleanComponentsRoot = normalize(componentsRoot);
 
-                // Bundle if it's in src/Components, otherwise externalize
                 if (cleanPath.startsWith(cleanComponentsRoot)) {
                     return false;
                 }
