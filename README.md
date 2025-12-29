@@ -1,14 +1,34 @@
 
-![HeroImage](Docs/blackboxui.png)
+<div align="center">
 
-[![Vite](https://img.shields.io/badge/Vite-5.0-646CFF?style=flat-square&logo=vite)](https://vitejs.dev/) [![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react)](https://reactjs.org/) [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?style=flat-square&logo=typescript)](https://www.typescriptlang.org/) [![Vercel API](https://img.shields.io/badge/API-Vercel-000000?style=flat-square&logo=vercel)](https://vercel.com/)  [![Obfuscated](https://img.shields.io/badge/Code-Obfuscated-FF4444?style=flat-square&logo=javascript)](https://github.com/javascript-obfuscator/javascript-obfuscator) [![License](https://img.shields.io/badge/Remote-Locked-00C853?style=flat-square&logo=shield)](https://shields.io/)
+<img src="Docs/Pictures/blackboxui.webp" alt="Hero Image" style="border-radius: 50px; padding: 1px; background: linear-gradient(135deg, rgba(255,47,83,0.09), rgba(255,133,179,0.29), rgba(11,72,255,0.19)); box-shadow: 0px 10px 25px rgba(255,0,0,0.3); transition: transform 0.3s;"/>
 
-# Quick Usage Guide
+<div align="center">
 
-### For Detailed Documentation [![Button](https://img.shields.io/badge/🏗️%20Open%20Architecture%20Docs-1565C0?style=for-the-badge)](Docs/DetaileGuide.md)
+# ⚙ 𝐁𝐥𝐚𝐜𝐤𝐁𝐨𝐱 𝐑𝐮𝐧𝐭𝐢𝐦𝐞 
+
+#### <p>Remote execution control for obfuscated React components</p>
+<br/>
+<img src="https://img.shields.io/badge/Runtime-Vite_5-646CFF?style=for-the-badge&logo=vite" />
+<img src="https://img.shields.io/badge/UI-React_18-61DAFB?style=for-the-badge&logo=react" />
+<img src="https://img.shields.io/badge/Language-TypeScript_5-3178C6?style=for-the-badge&logo=typescript" />
+<img src="https://img.shields.io/badge/Infra-Vercel_API-000000?style=for-the-badge&logo=vercel" />
+<img src="https://img.shields.io/badge/Security-Code_Obfuscated-FF4444?style=for-the-badge&logo=javascript" />
+<img src="https://img.shields.io/badge/Access-Remote_Locked-00C853?style=for-the-badge&logo=shield" />
+<br/>
+<br/>
+</div>
 
 
-**Remote License Locking & Obfuscation for React Projects**
+<div align="center">
+
+### 🏗️ 𝐎𝐩𝐞𝐧 𝐀𝐫𝐜𝐡𝐢𝐭𝐞𝐜𝐭𝐮𝐫𝐞 𝐃𝐨𝐜𝐬
+[![View Docs](https://img.shields.io/badge/📖%20Detailed%20Guide-1565C0?style=for-the-badge)](Docs/DetaileGuide.md)
+
+</div>
+
+
+
 
 > Protect your React components from theft with remote-controlled licensing and code obfuscation. Perfect for trial versions, unpaid features, or client-specific deployments.
 
@@ -39,7 +59,7 @@ Create these 5 files in your project:
 2. **`obfuscate.js`** (root) - Obfuscation settings
 3. **`src/LICENSE_O_S/useComponentGuard.ts`** - License checking hook
 4. **`src/LICENSE_O_S/Ui_G.tsx`** - UI wrapper components
-5. **`src/Pages/ComponentsExports.tsx`** - Barrel file for locked components
+5. **`src/BarrelFile/ComponentsToBeLocked.tsx`** - Barrel file for locked components
 
 > 📁 Copy the full code from the provided files
 
@@ -48,7 +68,7 @@ Create these 5 files in your project:
 **In `vite.lock.config.ts`** - Set your project paths:
 ```typescript
 const componentsRoot = path.resolve(srcRoot, 'Components');  // Components to lock
-const entryFile = path.resolve(srcRoot, 'Pages/ComponentsExports.tsx');  // Barrel file
+const entryFile = path.resolve(srcRoot, 'src/BarrelFile/ComponentsToBeLocked.tsx');  // Barrel file
 const LK_Comp = 'Core';  // Output folder name
 const LK_CompFileName = 'core-ui-runtime';  // Output file name
 ```
@@ -80,7 +100,7 @@ private checkInterval: number = 300000; // 5 minutes (in milliseconds)
 
 ### 1. Create Barrel File
 
-**`src/Pages/ComponentsExports.tsx`**:
+**`src/BarrelFile/ComponentsToBeLocked.tsx`**:
 ```typescript
 // List all components you want to lock
 import { QuickLinkButton } from "../Components/ContactUsPage/QuickLinkButton";
@@ -275,7 +295,7 @@ const GS = useComponentGuard({
 - **Obfuscation**: `obfuscate.js` (root)
 - **Guard hook**: `src/LICENSE_O_S/useComponentGuard.ts`
 - **Guard UI**: `src/LICENSE_O_S/Ui_G.tsx`
-- **Barrel file**: `src/Pages/ComponentsExports.tsx`
+- **Barrel file**: `src/BarrelFile/ComponentsToBeLocked.tsx`
 - **Output**: `src/Core/core-ui-runtime.es.js`
 
 ### Key Commands
@@ -302,16 +322,16 @@ const GS = useComponentGuard({
 ### Test Component: `ShimmerHeading`
 
 <div align="center">
-  <img src="Docs/testComp.png" width="300" alt="ShimmerHeading Test Component"/>
+  <img src="Docs/Pictures/testComp.png" width="300" alt="ShimmerHeading Test Component"/>
 </div>
 
 ---
 
 ### Locked vs Unlocked Comparison
 
-| Locked Component                                                    | Unlocked Component |
-|---------------------------------------------------------------------|------------------|
-| <img src="Docs/lockedComp.png" width="300" alt="Locked Component"/> | <img src="Docs/normalComp.png" width="300" alt="Unlocked Component"/> |
+| Locked Component                                                                    | Unlocked Component                                                                    |
+|-------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------|
+| <img src="Docs/Pictures/lockedCompCropeed.png" width="300" alt="Locked Component"/> | <img src="Docs/Pictures/normalCompCropeed.png" width="300" alt="Unlocked Component"/> |
 
 This shows a **side-by-side comparison** of how the `ShimmerHeading` component is displayed when **locked** versus **unlocked**.
 

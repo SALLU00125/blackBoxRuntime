@@ -1,12 +1,29 @@
-# Remote License Locking & Obfuscation System
+!<!-- Hero Section -->
+<div align="center">
 
-**Complete Documentation for React Component Protection**
+<img src="Pictures/DETAILED_GUIDE.webp" alt="Hero Image" width="700" style="border-radius: 25px; padding: 10px; background: linear-gradient(135deg, #ff375a, #ff85b3, #0b48ff); box-shadow: 0 15px 35px rgba(0,0,0,0.3); transition: transform 0.3s;"/>
 
-> **Purpose**: Prevent theft of trial/unpaid components by combining code obfuscation with remote license verification. Perfect for SaaS trials, client-specific builds, or feature gating.
+
+<h1>🛡️ 𝐁𝐥𝐚𝐜𝐤𝐁𝐨𝐱 𝐑𝐮𝐧𝐭𝐢𝐦𝐞  </h1>
+<p><i>Remote License Locking & Obfuscation System for React Components</i></p>
+
+</div>
 
 ---
 
-## 📚 Table of Contents
+## 🔑 System Overview
+
+**Purpose:** Protect your React components from unauthorized use by combining:
+
+- **Code Obfuscation** 🔒 – Transform your JS/TS code to a nearly unreadable form.
+- **Remote License Verification** 🌐 – Ensure components only run for authorized users or domains.
+- **Feature Gating** 🧩 – Enable/disable components dynamically for trials, SaaS, or client-specific builds.
+
+This system is ideal for **client distribution, trial limitations, or high-value component protection**.
+
+---
+
+## 📖 Table of Contents
 
 1. [System Overview](#-system-overview)
 2. [Architecture](#-architecture)
@@ -109,7 +126,7 @@ This system provides **dual protection**:
 ```
 
 #### Step 2: Barrel File Creation
-**`ComponentsExports.tsx`** aggregates all components to be locked:
+**`ComponentsToBeLocked.tsx`** aggregates all components to be locked:
 ```typescript
 export { ComponentA, ComponentB, ComponentC };
 ```
@@ -184,8 +201,8 @@ project-root/
 │   │   ├── useComponentGuard.ts # Core guard hook
 │   │   └── Ui_G.tsx             # UI wrapper components
 │   │
-│   ├── Pages/
-│   │   └── ComponentsExports.tsx # Barrel file (entry point)
+│   ├── BarrelFile/
+│   │   └── ComponentsToBeLocked.tsx # Barrel file (entry point)
 │   │
 │   ├── Components/              # Your components to lock
 │   │   └── [YourComponents].tsx
@@ -220,7 +237,7 @@ LicenseBackend/
 const componentsRoot = path.resolve(srcRoot, 'Components');
 
 // Entry point - barrel file that exports locked components
-const entryFile = path.resolve(srcRoot, 'Pages/ComponentsExports.tsx');
+const entryFile = path.resolve(srcRoot, 'src/BarrelFile/ComponentsToBeLocked.tsx');
 
 // Output names - where obfuscated code goes
 const LK_Comp = 'Core';              // Folder name
@@ -815,7 +832,7 @@ jest.mock('../LICENSE_O_S/useComponentGuard', () => ({
 | `obfuscate.js` | Obfuscation | `LK_Comp`, `LK_CompFileName`, obfuscation intensity settings |
 | `useComponentGuard.ts` | License hook | `apiEndpoint`, `checkInterval`, `pageIsolation` |
 | `Ui_G.tsx` | UI wrappers | Styling, custom components |
-| `ComponentsExports.tsx` | Barrel file | Component imports/exports |
+| `ComponentsToBeLocked.tsx` | Barrel file | Component imports/exports |
 | `guard.js` | Backend API | Environment variables, time validation |
 
 ### Commands
