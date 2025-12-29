@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="Docs/Pictures/blackboxui.webp" alt="Hero Image" style="border-radius: 50px; padding: 1px; background: linear-gradient(135deg, rgba(255,47,83,0.09), rgba(255,133,179,0.29), rgba(11,72,255,0.19)); box-shadow: 0px 10px 25px rgba(255,0,0,0.3); transition: transform 0.3s;"/>
+<img src="Docs/Pictures/blackboxui.webp" alt="Hero Image" style="border-radius: 50px;"/>
 
 # ⚙ 𝐁𝐥𝐚𝐜𝐤𝐁𝐨𝐱 𝐑𝐮𝐧𝐭𝐢𝐦𝐞
 
@@ -26,102 +26,67 @@
 
 </div>
 
+## 🖼️ How It Works
 
+### Test Component: `ShimmerHeading`
 
-## 🏛️ **CRITICAL: Two-Project Architecture**
+<div align="left">
+  <img src="Docs/Pictures/testComp.png" width="300" alt="ShimmerHeading Test Component"/>
+</div>
 
-BlackBox Runtime uses a **Creator/Consumer** architecture to keep your licensing system secure and maintainable.
+### Locked vs Unlocked
+
+<table align="center" style="text-align: center;">
+  <thead>
+    <tr>
+      <th style="padding: 10px;">🔓 Unlocked <br/><small>(LOCK_ENABLED=false)</small></th>
+      <th style="padding: 10px;">🔒 Locked <br/><small>(LOCK_ENABLED=true)</small></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="padding: 10px;">
+        <img src="Docs/Pictures/normalCompCropeed.png" width="300" style="object-fit: cover;" alt="Unlocked Component"/>
+      </td>
+      <td style="padding: 10px;">
+        <img src="Docs/Pictures/lockedCompCropeed.png" width="300" style="object-fit: cover;" alt="Locked Component"/>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+## 🏛️ Two-Project Architecture
+
+BlackBox uses a **Creator/Consumer** split to keep your licensing system secure.
 
 ```
-┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃            🧱  PROJECT ARCHITECTURE — QUICK VIEW              ┃
-┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-
-
 ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓        ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃  🔒  PROJECT 1                ┃──────▶ ┃  📦  PROJECT 2                   ┃
-┃  “MyProject”                  ┃        ┃  “MyProject_deliver”             ┃
-┃  𝘊𝘳𝘦𝘢𝘵𝘰𝘳 · 𝘗𝘳𝘪𝘷𝘢𝘵𝘦              ┃        ┃  𝘊𝘰𝘯𝘴𝘶𝘮𝘦𝘳 · 𝘊𝘭𝘪𝘦𝘯𝘵                ┃
+┃  🔒  PROJECT 1 (Creator)      ┃──────▶ ┃  📦  PROJECT 2 (Consumer)        ┃
+┃  "MyProject"                  ┃        ┃  "MyProject_deliver"             ┃
+┃  Private · Keep to yourself   ┃        ┃  Clean · Ship to clients         ┃
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛        ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-        │                                        │
-        │  📂 CONTAINS                           │  📂 CONTAINS
-        │  ──────────                            │  ──────────
-        │  • LICENSE_O_S/*                       │   • Core/* (obfuscated)
-        │  • vite.lock.config.ts                 │   • ComponentsToBeLocked.tsx
-        │  • obfuscate.js                        │      ↳ imports from Core
-        │  • VercelBackend/*                     │   • Normal app files
-        │  • config.variables.ts                 │
-        │  • Source components                   │  🚫 DOES NOT CONTAIN
-        │  • Core/* (generated)                  │  ─────────────────
-        │                                        │      ❌ LICENSE_O_S/*
-        │  🎯 PURPOSE                            │      ❌ vite.lock.config.ts
-        │  ─────────                             │      ❌ obfuscate.js
-        │  Build & update locked                 │      ❌ VercelBackend/*
-        │  components (BlackBox)                 │      ❌ Any BlackBox files
-        │                                        │
-        └────────────────────────────────────────┘
-                                                 
-                                                     🎯 PURPOSE
-                                                     ─────────
-                                                        Clean, safe
-                                                        client delivery
-                                                     
 
+📂 Contains:                             📂 Contains:
+• LICENSE_O_S/*                          • Core/* (obfuscated)
+• vite.lock.config.ts                    • ComponentsToBeLocked.tsx
+• obfuscate.js                           • Normal app files
+• VercelBackend/*
+• config.variables.ts                    🚫 Does NOT contain:
+• Source components                      • LICENSE_O_S/*
+                                         • vite.lock.config.ts
+🎯 Purpose:                              • obfuscate.js
+Build & update locked components         • VercelBackend/*
+                                         • Any licensing code
 
+                                         🎯 Purpose:
+                                         Safe client delivery
 ```
 
-<br/>
-<br/>
-
-
-### 🔂 Secure Delivery Workflow (Creator → Client)
-
-0. **⚙️ Setup** Project 1 with all configuration.
-1. **✅ Start with fresh copy** : Duplicate Project 1 → name it Project 2
-2. **🧹 Clean Project 2 immediately** `rm -rf LICENSE_O_S VercelBackend vite.lock.config.ts obfuscate.js`
-3. **🛢️ Barrel Update in Project 2** : `src/BarrelFile/ComponentsToBeLocked.tsx`
-    ```ts
-   import { component1 , ... , components10 } from "../Components/ShimmerHeadingAndSubHeading.tsx";
-   export { component1 , ... , components10 }
-   ```
-4. ❌ Also **remove any original unlocked** component Component_sourceCode.tsx in project 2.
-   ( we keep only Core/* in Project 2)
-
-3. **🔐 Build locked assets** (in Project 1)
-   ```bash
-   npm run build:lock
-   ```
-
-4. **📦 Copy only the safe part**  
-   Copy `Core/` → Project 2
-
-5. **🚚 Test Project 2 and then Ship**  
-   Send **only Project 2** to client
-
-6. **🔄 Updates** → repeat steps 1–6
-
-> Client receives **zero** licensing code, obfuscation tools, or source components.
-
-
-
-
-### Why This Matters
-
-**Security**: Client never sees your licensing system, backend API, or obfuscation configs  
-**Maintainability**: Update components in Project 1, regenerate, copy to Project 2  
-**Clean Delivery**: Client receives only production-ready obfuscated code
-
-<br/>
-
----
-
----
-<br/>
-
+**Workflow**: Edit in Project 1 → Build → Copy `Core/` to Project 2 → Ship Project 2
 
 ## ⚡ Quick Setup (15 minutes)
 
-### Step 1: Install Dependencies
+### 1. Install Dependencies
 
 ```bash
 yarn add -D \
@@ -133,88 +98,54 @@ yarn add -D \
   ts-node \
   @vitejs/plugin-react \
   vite-plugin-dts \
-  vite-plugin-svgr
+  vite-plugin-svgr \
+  @types/node
 ```
 
-### Step 2: Create Project Structure
+### 2. Create Required Files in Project 1
 
-```bash
-# Create base project (Project 1)
- using vite
+Copy these from the repository:
 
-# Copy these required directories & files in project 
-cp -r src/LICENSE_O_S/LicenseGuard
-cp -r src/BarrelFile
-cp -r src/Components
-cp -r VercelBackend/api
-```
+#### Core Configuration Files
+1. `src/LICENSE_O_S/config.variables.ts` - Centralized settings
+2. `vite.lock.config.ts` - Build configuration
+3. `obfuscate.js` - Obfuscation script
+4. `src/LICENSE_O_S/LicenseGuard/useComponent_G.ts` - Guard hook
+5. `src/LICENSE_O_S/LicenseGuard/ui_G.tsx` - Guard UI wrapper
 
-### Step 3: Add Core Files
-
-Create/Copy these files in **Project 1** (MyProject):
-
-### NOTE: Better is to copy and modify these.
-#### 1. **`src/LICENSE_O_S/config.variables.ts`** - **NEW: Centralized Configuration**
+#### Your Files
+6. `src/BarrelFile/ComponentsToBeLocked.tsx` - List components to lock
 
 ```typescript
-// src/LICENSE_O_S/config.variables.ts 
+// Example: ComponentsToBeLocked.tsx
+import { QuickLinkButton } from "../Components/ContactUsPage/QuickLinkButton";
+import { SectionHeader } from "../Components/ContactUsPage/SectionHeader";
 
+export { QuickLinkButton, SectionHeader };
+```
+
+### 3. Configure Settings
+
+Edit `src/LICENSE_O_S/config.variables.ts`:
+
+```typescript
 export const BUILD_CONFIG = {
-    // Output Directory for the Locked_Comp_name
     LK_COMP: 'Core',
-    // Output File inside the 'LK_COMP'
     LK_COMP_FILENAME: 'core-ui-runtime',
-
-    // Component paths
-    // If in src use 'Components'
-    // If inside another folder use 'FolderName/**/Components'
     COMPONENTS_FOLDER: 'Components',
     BARREL_FILE_PATH: 'BarrelFile/ComponentsToBeLocked.tsx',
 } as const;
 
 export const GUARD_CONFIG = {
-    // Your vercel Backend API
     API_ENDPOINT: 'https://your-backend.vercel.app/api/guard',
-
-    // Timing for periodic pinging the API for response  (in milliseconds)
     CHECK_INTERVAL: 300000,  // 5 minutes
-
-    // If true, Each Page will trigger new api call
     PAGE_ISOLATION: false,
 } as const;
-
-};
 ```
 
----
-### 🔗 Shared Configuration (Files 2–5) :
-### _Just copy the 2,3,4,5 files code from project._
-All of these take in properties from **`src/LICENSE_O_S/config.variables.ts`** 
-- #### 2. **`vite.lock.config.ts`** (root) 
-- #### 3. **`obfuscate.js`** (root) 
-- #### 4. **`src/LICENSE_O_S/LicenseGuard/useComponent_G.ts`** - Guard hook 
-- #### 5. **`src/LICENSE_O_S/LicenseGuard/ui_G.tsx`** - Guard UI wrapper
+### 4. Add Build Script
 
-
-
----
-
-
-
-#### 6. **`src/BarrelFile/ComponentsToBeLocked.tsx`** - Barrel file
-
-```typescript
-// List all components you want to lock
-import { QuickLinkButton } from "../Components/ContactUsPage/QuickLinkButton";
-import { SectionHeader } from "../Components/ContactUsPage/SectionHeader";
-import { StatisticCard } from "../Components/ContactUsPage/StatisticCard";
-
-export { QuickLinkButton, SectionHeader, StatisticCard };
-```
-
-### Step 4: Add Build Script
-
-**In `package.json`**:
+In `package.json`:
 ```json
 {
   "scripts": {
@@ -223,206 +154,135 @@ export { QuickLinkButton, SectionHeader, StatisticCard };
 }
 ```
 
----
+## 🔒 Lock Your Components
 
-## 🔒 Locking Your Components
-
-### ⚠️ **CRITICAL SECURITY RULES**
+### ⚠️ CRITICAL: Security Rules
 
 ```
-╔════════════════════════════════════════════════════════════════╗
-║  🚨 NEVER EXPOSE LICENSE_O_S FILES IN YOUR IMPORTS 🚨          ║
-╚════════════════════════════════════════════════════════════════╝
-
-❌ WRONG - These imports expose your licensing system:
+❌ WRONG - Exposes licensing system:
    import { G_Wrapper } from "../LICENSE_O_S/LicenseGuard/ui_G.tsx";
-   import { useComponentGuard } from "../LICENSE_O_S/LicenseGuard/useComponent_G.ts";
+   export { G_Wrapper };  // Never re-export!
 
-✅ CORRECT - Embed imports INSIDE each component file:
-   These files must be directly imported and used within component files
-   They should never be re-exported or exposed through barrel files
+✅ CORRECT - Import directly inside each component:
+   import { G_Wrapper } from "../LICENSE_O_S/LicenseGuard/ui_G.tsx";
+   // Use immediately, don't re-export
 ```
 
-### 1. Wrap Each Component 
-#### ( Component to be Locked to be wrapped only )
+### Wrap Each Component
 
-**In each component file** (e.g., `QuickLinkButton.tsx`):
+In each component file (e.g., `QuickLinkButton.tsx`):
 
 ```typescript
-// ✅ CORRECT: Import directly inside component file
+// ✅ Import directly in component file
 import { G_Wrapper } from "../LICENSE_O_S/LicenseGuard/ui_G.tsx";
 import { useComponentGuard } from "../LICENSE_O_S/LicenseGuard/useComponent_G.ts";
 
 export const QuickLinkButton: React.FC = () => {
-  // Add guard hook
   const GS = useComponentGuard();
 
   return (
-    // Wrap entire component JSX
     <G_Wrapper State_G={GS}>
-      {/* Your existing component code */}
       <button>Click me</button>
     </G_Wrapper>
   );
 };
 ```
 
-### 2. Build Locked Version
+### Build Locked Version
 
 ```bash
 npm run build:lock
-// or 
-yarn build:lock
 ```
 
-This creates: `src/Core/core-ui-runtime.es.js` (obfuscated + locked)
+<img src="Docs/Pictures/LockedSuccessCreation.png" width="100%" alt="Build Success" />
 
----
+Output: `src/Core/core-ui-runtime.es.js` (obfuscated)
 
-<br/>
-<br/>
+## 📦 Prepare Project 2 (Delivery)
 
-## 📦 **Two-Project Workflow: Creator → Consumer**
-#### THESE ARE STEPS TO BE DONE IN PROJECT 2 only . _**( not to be done for project 1)**_
-<br/>
+**Do this ONCE after Project 1 is working:**
 
-### Step 0: Once Project 1 is setup and running perfectly.
-### Step 1: Create Delivery Project (One-Time Setup)
+### Step 1: Duplicate Project
 
 ```bash
-# From your project root
 cd ..
 cp -r MyProject MyProject_deliver
-
 cd MyProject_deliver
 ```
 
-### Step 2: Clean Delivery Project
-
-Execute this cleanup script from **MyProject_deliver root**:
+### Step 2: Clean Sensitive Files
 
 ```bash
-# cleanup.sh - Run from MyProject_deliver root
-#!/bin/bash
-
-echo "🧹 Cleaning BlackBox files from delivery project..."
-
 # Remove licensing system
 rm -rf src/LICENSE_O_S
-
-# Remove build configuration
 rm -f vite.lock.config.ts
 rm -f obfuscate.js
-
-# Remove backend
 rm -rf VercelBackend
-
-# Remove barrel file (no longer needed)
-rm -rf src/BarrelFile
-
-echo "✅ Cleanup complete - Project ready for delivery"
 ```
 
-Make it executable and run:
-```bash
-chmod +x cleanup.sh
-./cleanup.sh
-```
+### Step 3: Update Imports
 
-### Step 3: Update Component Exports (In MyProject_deliver)
-
-**In `src/BarrelFile/ComponentsToBeLocked.tsx`** or your main export file:
+In `src/BarrelFile/ComponentsToBeLocked.tsx`:
 
 ```typescript
 // ❌ Remove original imports
 // import { QuickLinkButton } from "./Components/ContactUsPage/QuickLinkButton";
-// import { SectionHeader } from "./Components/ContactUsPage/SectionHeader";
 
 // ✅ Replace with locked version
-import { 
-  QuickLinkButton, 
-  SectionHeader, 
-  StatisticCard 
-} from "./Core/core-ui-runtime.es";
+import { QuickLinkButton } from "./Core/core-ui-runtime.es";
 
-export { QuickLinkButton, SectionHeader, StatisticCard };
+export { QuickLinkButton };
 ```
 
-### Step 4: Delete Original Source Files (In MyProject_deliver)
+### Step 4: Delete Source Files
 
 ```bash
-# From MyProject_deliver root
 rm -rf src/Components/ContactUsPage/QuickLinkButton.tsx
 rm -rf src/Components/ContactUsPage/SectionHeader.tsx
-rm -rf src/Components/ContactUsPage/StatisticCard.tsx
 ```
 
-### Step 5: Verify Delivery Project
+### Step 5: Verify
 
-**MyProject_deliver should only contain:**
-- ✅ `src/Core/core-ui-runtime.es.js` (obfuscated)
-- ✅ `src/BarrelFile/ComponentsToBeLocked.tsx` (importing from Core)
-- ✅ Regular app files
-- ✅ package.json, vite.config.ts (normal build)
+**Project 2 should contain:**
+- ✅ `src/Core/core-ui-runtime.es.js`
+- ✅ `src/BarrelFile/ComponentsToBeLocked.tsx`
+- ✅ Normal app files
 
 **Should NOT contain:**
-- ❌ LICENSE_O_S/*
+- ❌ LICENSE_O_S/
 - ❌ vite.lock.config.ts
 - ❌ obfuscate.js
-- ❌ VercelBackend/*
-- ❌ Original component source files
+- ❌ VercelBackend/
+- ❌ Original source components
 
----
+## 🔄 Update Workflow
 
-## 🔄 **Update Workflow**
-
-When you need to modify locked components:
+When modifying locked components:
 
 ```
-┌─────────────────────────────────────────────────────────────────┐
-│                      UPDATE WORKFLOW                             │
-└─────────────────────────────────────────────────────────────────┘
+1. Edit in Project 1
+   → Modify src/Components/YourComponent.tsx
 
-1️⃣  Edit in MyProject (Base Creator)
-    • Modify src/Components/ContactUsPage/QuickLinkButton.tsx
-    • Make your changes
+2. Rebuild
+   → npm run build:lock
 
-2️⃣  Rebuild in MyProject
-    npm run build:lock
-    • Generates new src/Core/core-ui-runtime.es.js
+3. Copy to Project 2
+   → cp src/Core/core-ui-runtime.es.js ../MyProject_deliver/src/Core/
 
-3️⃣  Copy to MyProject_deliver
-    cp src/Core/core-ui-runtime.es.js ../MyProject_deliver/src/Core/
+4. Test Project 2
+   → cd ../MyProject_deliver && npm run dev
 
-4️⃣  Test MyProject_deliver
-    cd ../MyProject_deliver
-    npm run dev
-
-5️⃣  Ship updated MyProject_deliver to client
-    • Client receives only the obfuscated Core/* bundle
-    • No trace of licensing system visible
+5. Ship Project 2 to client
 ```
 
----
+## 🌐 Deploy Backend
 
-## 🌐 Deploy Backend (Vercel)
+### 1. Setup Vercel Project
 
-### 1. Create Vercel Project Structure 
-#### ( whole VercelBackend folder is provided so use the files as it is)
-
-```
-VercelBackend/
-├── api/
-│   └── guard.js
-├── package.json
-└── vercel.json
-```
-
-### These files are provided :
-1. **`VercelBackend/api/guard.js`**
-2. **`VercelBackend/package.json`** 
-3. **`VercelBackend/vercel.json`**
-
+Use the provided `VercelBackend/` folder with:
+- `api/guard.js`
+- `package.json`
+- `vercel.json`
 
 ### 2. Deploy
 
@@ -431,213 +291,133 @@ cd VercelBackend
 vercel deploy --prod
 ```
 
-### 3. Configure Environment Variables
+### 3. Set Environment Variables
 
 In Vercel Dashboard → Settings → Environment Variables:
 
-| Variable | Value | Purpose |
-|----------|-------|---------|
-| `LOCK_ENABLED` | `false` | Set to `true` to block access |
-| `SECRET_KEY` | `your-random-secret-123` | For secure hashing |
-| `LOCK_TITLE` | `Maintenance Mode` | Shown when locked |
-| `LOCK_MESSAGE` | `Feature unavailable` | Detailed message |
-| `LOCK_CONTACT` | `Contact: support@...` | Support info |
+| Variable | Example | Purpose |
+|----------|---------|---------|
+| `LOCK_ENABLED` | `false` | `true` = blocked, `false` = allowed |
+| `SECRET_KEY` | `random-secret-123` | Secure hashing |
+| `LOCK_TITLE` | `Maintenance Mode` | Lock screen title |
+| `LOCK_MESSAGE` | `Feature unavailable` | Lock screen message |
+| `LOCK_CONTACT` | `support@example.com` | Support contact |
 
 ### 4. Update Config
 
-**In `src/LICENSE_O_S/config.variables.ts`** (MyProject only):
+In Project 1's `src/LICENSE_O_S/config.variables.ts`:
 ```typescript
 export const GUARD_CONFIG = {
     API_ENDPOINT: 'https://your-actual-backend.vercel.app/api/guard',
-    // ... rest of config
+    // ...
 } as const;
 ```
 
----
-
 ## 🎛️ Control Access
 
-### Enable Lock (Block Components)
+Enable lock (block components):
 ```bash
-vercel env add LOCK_ENABLED
-# Enter: true
-vercel deploy --prod
+# In Vercel Dashboard, set:
+LOCK_ENABLED = true
 ```
 
-### Disable Lock (Allow Access)
+Disable lock (allow access):
 ```bash
-vercel env add LOCK_ENABLED
-# Enter: false
-vercel deploy --prod
+LOCK_ENABLED = false
 ```
 
-Changes take effect within 5 minutes (default check interval).
-
----
-
-## 🔧 Configuration Reference
-
-All configuration is now centralized in **`src/LICENSE_O_S/config.variables.ts`**:
-
-### Build Settings
-```typescript
-BUILD_CONFIG = {
-    LK_COMP: 'Core',              // Output folder name
-    LK_COMP_FILENAME: 'core-ui-runtime',  // Output file name
-    COMPONENTS_FOLDER: 'Components',      // Where components live
-    BARREL_FILE_PATH: 'BarrelFile/ComponentsToBeLocked.tsx'
-}
-```
-
-### Guard Settings
-```typescript
-GUARD_CONFIG = {
-    API_ENDPOINT: 'https://...',    // Your Vercel backend
-    CHECK_INTERVAL: 300000,         // 5 minutes = 300000ms
-    PAGE_ISOLATION: false           // Enable page-specific locking
-}
-```
-
-### Obfuscation Settings
-```typescript
-Obfuscate_settings = {
-    CONTROL_FLOW_THRESHOLD: 0.9,    // 0-1 (higher = more obfuscation)
-    STRING_ARRAY_THRESHOLD: 1,      // 0-1 (1 = maximum)
-    RESERVED_NAMES: [...]           // React hooks to preserve
-}
-```
-
----
+Changes take effect within 5 minutes (default `CHECK_INTERVAL`).
 
 ## ✅ Testing
 
-### 1. Test in Base Creator (MyProject)
-
+### Test Project 1 (Creator)
 ```bash
 cd MyProject
 npm run build:lock
 npm run dev
 ```
 
-Verify locked components show restriction UI when `LOCK_ENABLED=true`.
+Verify lock behavior works with `LOCK_ENABLED=true`.
 
-### 2. Test in Delivery Project (MyProject_deliver)
-
+### Test Project 2 (Delivery)
 ```bash
 cd MyProject_deliver
 npm run dev
 ```
 
 Verify:
-- ✅ Components work correctly
-- ✅ No console errors about missing LICENSE_O_S files
-- ✅ Lock/unlock behavior functions
-- ✅ Obfuscated code is unreadable in `Core/core-ui-runtime.es.js`
+- ✅ Components work
+- ✅ No licensing file errors
+- ✅ Lock/unlock responds correctly
+- ✅ Code in `Core/core-ui-runtime.es.js` is obfuscated
 
-### 3. Test Backend API
-
+### Test Backend
 ```bash
 curl -X POST https://your-backend.vercel.app/api/guard \
   -H "Content-Type: application/json" \
-  -d '{"t":1234567890123,"s":"abc123","r":"test-req-1"}'
+  -d '{"t":1234567890123,"s":"abc123","r":"test-1"}'
 ```
 
-Expected response:
+Expected:
 ```json
 {
   "locked": false,
   "title": "Access Restricted",
   "message": "Feature unavailable",
-  "contact": "Contact: support@...",
+  "contact": "support@example.com",
   "timestamp": 1234567890123
 }
 ```
-
----
 
 ## 🚨 Troubleshooting
 
 | Issue | Solution |
 |-------|----------|
-| "Cannot find module 'config.variables'" | Ensure path is `src/LICENSE_O_S/config.variables.ts` |
-| Components always blocked | Check `LOCK_ENABLED=false` in Vercel |
-| Build fails with config errors | Verify `BUILD_CONFIG` values match folder structure |
-| API CORS errors | Check `Access-Control-Allow-Origin` in `guard.js` |
-| Obfuscation fails | Lower `CONTROL_FLOW_THRESHOLD` to 0.7 |
-| Delivery project has license files | Re-run cleanup.sh script |
-
----
+| Cannot find config.variables | Check path: `src/LICENSE_O_S/config.variables.ts` |
+| Always blocked | Set `LOCK_ENABLED=false` in Vercel |
+| Build fails | Verify `BUILD_CONFIG` matches folder structure |
+| CORS errors | Check `Access-Control-Allow-Origin` in `guard.js` |
+| Licensing files in Project 2 | Re-run cleanup steps |
 
 ## 📋 Quick Reference
 
-### File Locations (Project 1: MyProject)
-- **Config**: `src/LICENSE_O_S/config.variables.ts` ⭐ NEW
-- **Build config**: `vite.lock.config.ts` (reads from config.variables.ts)
-- **Obfuscation**: `obfuscate.js` (reads from config.variables.ts)
-- **Guard hook**: `src/LICENSE_O_S/LicenseGuard/useComponent_G.ts`
-- **Guard UI**: `src/LICENSE_O_S/LicenseGuard/ui_G.tsx`
-- **Barrel file**: `src/BarrelFile/ComponentsToBeLocked.tsx`
-- **Output**: `src/Core/core-ui-runtime.es.js`
+### Project 1 Files
+- Config: `src/LICENSE_O_S/config.variables.ts`
+- Build: `vite.lock.config.ts`
+- Obfuscation: `obfuscate.js`
+- Guard: `src/LICENSE_O_S/LicenseGuard/`
+- Output: `src/Core/core-ui-runtime.es.js`
 
-### File Locations (Project 2: MyProject_deliver)
-- **Obfuscated bundle**: `src/Core/core-ui-runtime.es.js`
-- **Exports**: `src/BarrelFile/ComponentsToBeLocked.tsx`
-- **NO LICENSE_O_S, vite.lock.config.ts, obfuscate.js, or VercelBackend**
+### Project 2 Files
+- Bundle: `src/Core/core-ui-runtime.es.js`
+- Exports: `src/BarrelFile/ComponentsToBeLocked.tsx`
 
 ### Key Commands
-- **Build locked version**: `npm run build:lock` (in MyProject)
-- **Copy to delivery**: `cp src/Core/core-ui-runtime.es.js ../MyProject_deliver/src/Core/`
-- **Deploy backend**: `vercel deploy --prod` (in VercelBackend)
-- **Enable lock**: Set `LOCK_ENABLED=true` in Vercel
-- **Disable lock**: Set `LOCK_ENABLED=false` in Vercel
+- Build: `npm run build:lock` (Project 1)
+- Copy: `cp src/Core/core-ui-runtime.es.js ../MyProject_deliver/src/Core/`
+- Deploy: `vercel deploy --prod` (VercelBackend)
 
----
+## 🎯 First-Time Checklist
 
-## 🎯 Checklist for First-Time Setup
-
-- [ ] Install dependencies in MyProject
-- [ ] Create `src/LICENSE_O_S/config.variables.ts` with your settings
-- [ ] Create all 6 core files (vite.lock.config.ts, obfuscate.js, etc.)
-- [ ] Wrap components with G_Wrapper and useComponentGuard
-- [ ] Create barrel file listing locked components
+**Project 1 Setup:**
+- [ ] Install dependencies
+- [ ] Create `config.variables.ts` with your settings
+- [ ] Copy all 5 core files
+- [ ] Wrap components with `G_Wrapper` and `useComponentGuard`
+- [ ] Create barrel file
 - [ ] Run `npm run build:lock` successfully
-- [ ] Deploy VercelBackend with environment variables
-- [ ] Update API_ENDPOINT in config.variables.ts
-- [ ] Test lock/unlock in MyProject
-- [ ] Copy MyProject → MyProject_deliver
-- [ ] Run cleanup.sh in MyProject_deliver
-- [ ] Update ComponentsToBeLocked.tsx in MyProject_deliver
-- [ ] Delete original source files from MyProject_deliver
-- [ ] Test MyProject_deliver thoroughly
-- [ ] Ship ONLY MyProject_deliver to client
+- [ ] Deploy VercelBackend
+- [ ] Update `API_ENDPOINT` in config
+- [ ] Test lock/unlock
+
+**Project 2 Setup:**
+- [ ] Copy Project 1 → Project 2
+- [ ] Remove LICENSE_O_S, vite.lock.config.ts, obfuscate.js, VercelBackend
+- [ ] Update `ComponentsToBeLocked.tsx` imports
+- [ ] Delete original source components
+- [ ] Test thoroughly
+- [ ] Ship ONLY Project 2 to client
 
 ---
 
-## 📚 Next Steps
-
-1. **Read the detailed architecture docs** for advanced configurations
-2. **Customize obfuscation** by adjusting `Obfuscate_settings` in config.variables.ts
-3. **Set up CI/CD** to automate the MyProject → MyProject_deliver workflow
-4. **Implement versioning** for Core bundles
-5. **Add monitoring** to track license check failures
-
----
-
-## 🖼️ Demonstration
-
-### Test Component: `ShimmerHeading`
-
-<div align="center">
-  <img src="Docs/Pictures/testComp.png" width="300" alt="ShimmerHeading Test Component"/>
-</div>
-
----
-
-### Locked vs Unlocked Comparison
-
-| Locked Component (LOCK_ENABLED=true) | Unlocked Component (LOCK_ENABLED=false) |
-|---------------------------------------|------------------------------------------|
-| <img src="Docs/Pictures/lockedCompCropeed.png" width="300" alt="Locked Component"/> | <img src="Docs/Pictures/normalCompCropeed.png" width="300" alt="Unlocked Component"/> |
-
-- **Left**: Component blocked by remote license check
-- **Right:** The component served normally from the source code.  
+**Need more details?** See [Detailed Guide](Docs/DetaileGuide.md) for advanced configurations.
