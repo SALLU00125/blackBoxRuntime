@@ -2,10 +2,10 @@
 import fs from 'fs';
 import path from 'path';
 import JavaScriptObfuscator from 'javascript-obfuscator';
-
+import {BUILD_CONFIG, Obfuscate_settings} from "./src/LICENSE_O_S/config.variables.ts";
 //Outputs Vars
-const LK_Comp = 'Core';
-const LK_CompFileName = 'core-ui-runtime';
+const LK_Comp = BUILD_CONFIG.LK_COMP;
+const LK_CompFileName = BUILD_CONFIG.LK_COMP_FILENAME;
 
 const filePath = path.resolve(`src/${LK_Comp}/${LK_CompFileName}.es.js`);
 
@@ -21,12 +21,12 @@ const obfuscationResult = JavaScriptObfuscator.obfuscate(code, {
 
     // 2. CONTROL FLOW PROTECTION
     controlFlowFlattening: true,
-    controlFlowFlatteningThreshold: 0.9,
+    controlFlowFlatteningThreshold: Obfuscate_settings.CONTROL_FLOW_THRESHOLD,
 
     // 3. STRING OBFUSCATION
     stringArray: true,
     stringArrayEncoding: ['rc4'], // RC4 only is stronger & more stable than base64+rc4
-    stringArrayThreshold: 1,
+    stringArrayThreshold: Obfuscate_settings.STRING_ARRAY_THRESHOLD,
     stringArrayWrappersCount: 5,
     stringArrayWrappersType: 'function',
     stringArrayWrappersChainedCalls: true,
@@ -60,21 +60,7 @@ const obfuscationResult = JavaScriptObfuscator.obfuscate(code, {
     unicodeEscapeSequence: true,
 
     // 9. RESERVED NAMES (Minimal - only what's absolutely necessary)
-    reservedNames: [
-        // Core React
-        '^React$', '^useState$', '^useEffect$', '^useContext$',
-        '^useMemo$', '^useCallback$', '^useRef$', '^useReducer$',
-        '^useLayoutEffect$', '^jsx$', '^jsxs$', '^Fragment$',
-        '^default$', // Keep default exports working
-
-        // Your exported components (only if they MUST keep exact names)
-        '^ScrollLink$',
-        '^Element$',
-        '^ScrollToTop$',
-
-        // Add more ONLY if they're public API exports
-        // The fewer reserved names, the stronger the obfuscation
-    ],
+    reservedNames: Obfuscate_settings.RESERVED_NAMES,
 
     // 10. DEBUG & CONSOLE
     debugProtection: false,
@@ -101,6 +87,17 @@ const finalCode = '/* eslint-disable */\n' + obfuscationResult.getObfuscatedCode
 
 fs.writeFileSync(filePath, finalCode);
 
-console.log('✅ Obfuscation complete!');
-console.log(`📦 Output: ${filePath}`);
-console.log(`📏 Size: ${(finalCode.length / 1024).toFixed(2)} KB`);
+const RESET = '\x1b[0m';
+const FG_WHITE = '\x1b[97m';
+const FG_PINK = '\x1b[95m';
+const FG_BLUE = '\x1b[94m';
+const BG_DARK = '\x1b[48;5;235m';
+
+console.log(`
+${BG_DARK}${FG_PINK}╭────────────────────────────────────────────────────────────────────────────────────────────────────────────╮${RESET}
+${BG_DARK}${FG_PINK}│${FG_WHITE}                                   🔐  OBFUSCATION SUCCESSFUL                                               ${FG_PINK}│${RESET}
+${BG_DARK}${FG_PINK}├────────────────────────────────────────────────────────────────────────────────────────────────────────────┤${RESET}
+${BG_DARK}${FG_PINK}│${FG_BLUE} 📦 Output : ${FG_WHITE}${filePath.padEnd(86)}${FG_PINK}         │${RESET}
+${BG_DARK}${FG_PINK}│${FG_BLUE} 📏 Size   : ${FG_WHITE}${((finalCode.length / 1024).toFixed(2) + ' KB').padEnd(86)}${FG_PINK}         │${RESET}
+${BG_DARK}${FG_PINK}╰────────────────────────────────────────────────────────────────────────────────────────────────────────────╯${RESET}
+`);

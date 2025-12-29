@@ -1,3 +1,5 @@
+import { BUILD_CONFIG } from './src/LICENSE_O_S/config.variables';
+
 // vite.lock.config.ts
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
@@ -6,11 +8,11 @@ import path from 'path';
 
 const projectRoot = path.resolve(__dirname);
 const srcRoot = path.resolve(projectRoot, 'src');
-const componentsRoot = path.resolve(srcRoot, 'Components');
-const entryFile = path.resolve(srcRoot, 'BarrelFile/ComponentsToBeLocked.tsx');
+const componentsRoot = path.resolve(srcRoot, BUILD_CONFIG.COMPONENTS_FOLDER);
+const entryFile = path.resolve(srcRoot,  BUILD_CONFIG.BARREL_FILE_PATH);
 
-const LK_Comp = 'Core';
-const LK_CompFileName = 'core-ui-runtime';
+const LK_Comp = BUILD_CONFIG.LK_COMP;
+const LK_CompFileName = BUILD_CONFIG.LK_COMP_FILENAME;
 
 const normalize = (p: string) => path.normalize(p).split(path.sep).join('/');
 

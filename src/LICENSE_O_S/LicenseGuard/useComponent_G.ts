@@ -3,6 +3,7 @@
 // 🔒 PAGE-AWARE SHARED GUARD SYSTEM - Works across multiple pages/routes
 
 import { useState, useEffect, useRef } from 'react';
+import { GUARD_CONFIG} from "../config.variables.ts";
 
 // ============= TYPES =============
 export interface GuardState {
@@ -36,9 +37,9 @@ class HiddenGuardChannel {
     private currentState: Map<string, GuardState> = new Map();
     private lastCheckTime: Map<string, number> = new Map();
     private checkingPages: Set<string> = new Set();
-    private checkInterval: number = 300000; // 5mins
-    private apiEndpoint: string = 'https://license-lq.vercel.app/api/guard';
-    private pageIsolation: boolean = false;
+    private checkInterval: number = GUARD_CONFIG.CHECK_INTERVAL; // 5mins
+    private apiEndpoint: string = GUARD_CONFIG.API_ENDPOINT;
+    private pageIsolation: boolean = GUARD_CONFIG.PAGE_ISOLATION;
 
     private constructor() {}
 

@@ -2,8 +2,8 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 import { keyframes } from '@mui/system';
-import { G_Wrapper } from "../LICENSE_O_S/ui_G.tsx";
-import { useComponentGuard } from "../LICENSE_O_S/useComponent_G.ts";
+import { G_Wrapper } from "../LICENSE_O_S/LicenseGuard/ui_G.tsx";
+import { useComponentGuard } from "../LICENSE_O_S/LicenseGuard/useComponent_G.ts";
 
 interface ShimmerHeadingProps {
     headingText: string;
