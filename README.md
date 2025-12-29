@@ -3,7 +3,7 @@
 
 <img src="Docs/Pictures/blackboxui.webp" alt="Hero Image" style="border-radius: 50px; padding: 1px; background: linear-gradient(135deg, rgba(255,47,83,0.09), rgba(255,133,179,0.29), rgba(11,72,255,0.19)); box-shadow: 0px 10px 25px rgba(255,0,0,0.3); transition: transform 0.3s;"/>
 
-<div align="center">
+
 
 # ⚙ 𝐁𝐥𝐚𝐜𝐤𝐁𝐨𝐱 𝐑𝐮𝐧𝐭𝐢𝐦𝐞 
 
@@ -25,13 +25,13 @@
 ### 🏗️ 𝐎𝐩𝐞𝐧 𝐀𝐫𝐜𝐡𝐢𝐭𝐞𝐜𝐭𝐮𝐫𝐞 𝐃𝐨𝐜𝐬
 [![View Docs](https://img.shields.io/badge/📖%20Detailed%20Guide-1565C0?style=for-the-badge)](Docs/DetaileGuide.md)
 
-</div>
+
 
 
 
 
 > Protect your React components from theft with remote-controlled licensing and code obfuscation. Perfect for trial versions, unpaid features, or client-specific deployments.
-
+</div>
 ---
 
 ## ⚡ Quick Setup (15 minutes)
